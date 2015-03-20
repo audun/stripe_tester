@@ -8,11 +8,16 @@ module StripeTester
 
   LATEST_STRIPE_VERSION = "2014-10-07"
 
-  # send the url the webhook event
+  # create the event
   # There are two options you can use.  :method=>:overwrite, or :method=>:merge
   # Each will use a different way of merging the new attributes.
   def self.create_event(callback_type, attributes={}, options={method: :overwrite})
-    webhook_data = self.load_template(callback_type, attributes, options)
+    self.load_template(callback_type, attributes, options)
+  end
+
+  # create and send the event to the webhook url
+  def self.create_and_post_event(callback_type, attributes={}, options={method: :overwrite})
+    webhook_data = self.create_event(callback_type, attributes, options)
     
     post_to_url(webhook_data) if webhook_data
   end
